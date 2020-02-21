@@ -10,11 +10,11 @@ build/
 *.project
 *.lst
 *.hex
+*.sln
+*.dat
 bmptk_fixed_size_stack.c
 html/
 latex/
 .directory
 .idea
 cmake-build-debug
-.sln
-.dat
