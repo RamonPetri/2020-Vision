@@ -19,14 +19,14 @@ int main(int argc, char * argv[]) {
 	//ImageFactory::setImplementation(ImageFactory::STUDENT);
 
 
-	ImageIO::debugFolder = "D:\\Users\\Rolf\\Downloads\\FaceMinMin";
+	ImageIO::debugFolder = "C:\\Users\\dylan\\source\\repos\\2020-Vision\\testsets\\Set A\\Debug";
 	ImageIO::isInDebugMode = true; //If set to false the ImageIO class will skip any image save function calls
 
 
 
 
 	RGBImage * input = ImageFactory::newRGBImage();
-	if (!ImageIO::loadImage("D:\\Users\\Rolf\\Downloads\\TestA5.jpg", *input)) {
+	if (!ImageIO::loadImage("C:\\Users\\dylan\\source\\repos\\2020-Vision\\testsets\\Set A\\TestSet Images\\female-3.png", *input)) {
 		std::cout << "Image could not be loaded!" << std::endl;
 		system("pause");
 		return 0;
@@ -114,7 +114,7 @@ bool executeSteps(DLLExecution * executor) {
 		return false;
 	}
 
-	if (!executor->executeLocalizationStep5(false)) {
+	if (!executor->executeLocalizationStep5(true)) {
 		std::cout << "Localization step 5 failed!" << std::endl;
 		return false;
 	}
