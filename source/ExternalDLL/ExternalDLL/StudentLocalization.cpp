@@ -30,7 +30,10 @@ bool StudentLocalization::stepFindNoseEndsAndEyes(const IntensityImage &image, F
 }
 
 bool StudentLocalization::stepFindExactEyes(const IntensityImage& image, FeatureMap& features) const {
-
+	for (int i = 0; i <= 24; i++) {
+		std::cout<<"feature "<<i<<" "<< std::boolalpha <<features.hasFeature(i) << "\n";
+	}
+	
 
 	std::cout << std::endl << std::endl;
 	std::cout << "test" << std::endl;
@@ -39,6 +42,8 @@ bool StudentLocalization::stepFindExactEyes(const IntensityImage& image, Feature
 	//std::cout << "================Debug================" << std::endl;
 
 	auto time_1 = std::chrono::high_resolution_clock::now();
+	
+	
 	//Known head parameters.
 	Point2D<double> headLeftPoint = features.getFeature(Feature::FEATURE_HEAD_LEFT_NOSE_BOTTOM).getPoints()[0];
 	Point2D<double> headRightPoint = features.getFeature(Feature::FEATURE_HEAD_RIGHT_NOSE_BOTTOM).getPoints()[0];
