@@ -11,6 +11,7 @@
 #include "HereBeDragons.h"
 #include "RGBImageStudent.h"
 #include "ImageFactory.h"
+#include <chrono>
 
 bool StudentLocalization::stepFindHead(const IntensityImage &image, FeatureMap &features) const {
 	return false;
@@ -37,7 +38,7 @@ bool StudentLocalization::stepFindExactEyes(const IntensityImage& image, Feature
 	//std::cout << "Searching for: Eye's" << std::endl;
 	//std::cout << "================Debug================" << std::endl;
 
-
+	auto time_1 = std::chrono::high_resolution_clock::now();
 	//Known head parameters.
 	Point2D<double> headLeftPoint = features.getFeature(Feature::FEATURE_HEAD_LEFT_NOSE_BOTTOM).getPoints()[0];
 	Point2D<double> headRightPoint = features.getFeature(Feature::FEATURE_HEAD_RIGHT_NOSE_BOTTOM).getPoints()[0];
@@ -227,5 +228,8 @@ bool StudentLocalization::stepFindExactEyes(const IntensityImage& image, Feature
 	//Save debug image
 	ImageIO::saveRGBImage(*debugImage, ImageIO::getDebugFileName("Localization-5/debug.png"));
 	delete debugImage;
+	auto time_2 = std::chrono::high_resolution_clock::now();
+	auto function_duration = std::chrono::duration_cast<std::chrono::milliseconds>(time_2 - time_1).count();
+	std::cout << "Function duration time: " << function_duration << " ms\n";
 	return true;
 }
