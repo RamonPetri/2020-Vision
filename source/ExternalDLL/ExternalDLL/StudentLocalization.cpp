@@ -30,6 +30,12 @@ bool StudentLocalization::stepFindNoseEndsAndEyes(const IntensityImage &image, F
 }
 
 bool StudentLocalization::stepFindExactEyes(const IntensityImage& image, FeatureMap& features) const {
+	
+	///#######################
+	///#	Delete me please #
+	///#	I am just a debug#
+	///#	line so delete	 #
+	///#######################
 	for (int i = 0; i <= 24; i++) {
 		std::cout<<"feature "<<i<<" "<< std::boolalpha <<features.hasFeature(i) << "\n";
 	}
