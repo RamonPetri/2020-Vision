@@ -37,9 +37,45 @@ bool StudentLocalization::stepFindExactEyes(const IntensityImage& image, Feature
 	///#	line so delete	 #
 	///#######################
 	for (int i = 0; i <= 24; i++) {
-		std::cout<<"feature "<<i<<" "<< std::boolalpha <<features.hasFeature(i) << "\n";
+		std::cout<<"feature "<<i<<" "<< std::boolalpha <<" is "<<features.hasFeature(i) << "\n";
+		
 	}
 	
+
+
+	
+
+	Point2D<double> feat_left_head_nose = features.getFeature(Feature::FEATURE_HEAD_LEFT_NOSE_BOTTOM).getPoints()[0];
+	Point2D<double> feat_right_head_nose = features.getFeature(Feature::FEATURE_HEAD_RIGHT_NOSE_BOTTOM).getPoints()[0];
+	Point2D<double> head_left = features.getFeature(Feature::FEATURE_HEAD_LEFT_SIDE).getPoints()[0];
+	Point2D<double> head_right = features.getFeature(Feature::FEATURE_HEAD_RIGHT_SIDE).getPoints()[0];
+	Point2D<double> head_top = features.getFeature(Feature::FEATURE_HEAD_TOP).getPoints()[0];
+	double left_head_nose_bot_x = feat_left_head_nose.getX();
+	double left_head_nose_bot_y = feat_left_head_nose.getY();
+	double right_head_nose_bot_x = feat_right_head_nose.getX();
+	double right_head_nose_bot_y = feat_right_head_nose.getY();
+	double head_left_x = head_left.getX();
+	double head_left_y = head_left.getY();
+	double head_right_x = head_right.getX();
+	double head_right_y = head_right.getY();
+	double head_top_x = head_top.getX();
+	double head_top_y = head_top.getY();
+
+
+	std::cout << "xy coordinates of lef_head_nose_bot: " << "( " << left_head_nose_bot_x << " , " << left_head_nose_bot_y << ")" << std::endl;
+	std::cout << "xy coordinates of head left: " << "( " << head_left_x << " , " << head_left_y << ")" << std::endl;
+	std::cout << "xy coordinates of top head: " << "( " << head_top_x << " , " << head_top_y << ")" << std::endl;
+
+
+	for (size_t j = head_top_y; j <= left_head_nose_bot_y; j++) {
+
+		for (size_t i = head_left_x; i <= left_head_nose_bot_x; i++) {
+			int pix = image.getPixel(j, i);
+			std::cout << pix;
+		}
+		
+		std::cout << std::endl;
+	}
 
 	std::cout << std::endl << std::endl;
 	std::cout << "test" << std::endl;
