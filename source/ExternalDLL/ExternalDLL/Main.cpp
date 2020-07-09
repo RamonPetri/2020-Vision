@@ -9,9 +9,18 @@
 #include "HereBeDragons.h"
 #include "ImageFactory.h"
 #include "DLLExecution.h"
+#include <stdio.h>
+#include <dirent.h>
+#include <chrono>
+#include<iostream> 
+#include<tuple> 
+
+using Duration = std::chrono::microseconds;
 
 void drawFeatureDebugImage(IntensityImage &image, FeatureMap &features);
-bool executeSteps(DLLExecution * executor);
+bool executeFirstSteps(DLLExecution * executor);
+bool executeLastSteps(DLLExecution * executor);
+
 
 int main(int argc, char * argv[]) {
 
@@ -24,29 +33,60 @@ int main(int argc, char * argv[]) {
 
 
 
+	struct dirent* de;  // Pointer for directory entry
 
-	RGBImage * input = ImageFactory::newRGBImage();
-	if (!ImageIO::loadImage("C:\\Users\\ramon\\source\\repos\\2020-Vision\\testsets\\Set A\\TestSet Images\\female-3.png", *input)) {
-		std::cout << "Image could not be loaded!" << std::endl;
-		system("pause");
+	// opendir() returns a pointer of DIR type.
+	DIR* dr = opendir("C:\\Users\\dylan\\source\\repos\\2020-Vision\\testsets\\Set A\\TestSet Images");
+
+	if (dr == NULL)  // opendir returns NULL if couldn't open directory
+	{
+		printf("Could not open current directory");
 		return 0;
 	}
 
+	// Refer http://pubs.opengroup.org/onlinepubs/7990989775/xsh/readdir.html
+	// for readdir()
+	std::vector<std::string> vect;
+	while ((de = readdir(dr)) != NULL)
+		vect.push_back(de->d_name);
 
-	ImageIO::saveRGBImage(*input, ImageIO::getDebugFileName("debug.png"));
-
-	DLLExecution * executor = new DLLExecution(input);
-
-
-	if (executeSteps(executor)) {
-		std::cout << "Face recognition successful!" << std::endl;
-		std::cout << "Facial parameters: " << std::endl;
-		for (int i = 0; i < 16; i++) {
-			std::cout << (i+1) << ": " << executor->facialParameters[i] << std::endl;
+	int detection_counter = 0;
+	int total_time = 0;
+	for (uint8_t i = 2; i < vect.size(); i++) {
+		std::cout << vect[i] << std::endl;
+		RGBImage* input = ImageFactory::newRGBImage();
+		if (!ImageIO::loadImage("C:\\Users\\dylan\\source\\repos\\2020-Vision\\testsets\\Set A\\TestSet Images\\" + vect[i], *input)) {
+			std::cout << "Image could not be loaded!" << std::endl;
+			system("pause");
+			return 0;
 		}
-	}
 
-	delete executor;
+
+		ImageIO::saveRGBImage(*input, ImageIO::getDebugFileName("debug.png"));
+
+		DLLExecution* executor = new DLLExecution(input);
+
+
+		executeFirstSteps(executor);
+
+		auto begin = std::chrono::high_resolution_clock::now();
+		bool step = executor->executeLocalizationStep5(true);
+		auto end = std::chrono::high_resolution_clock::now();
+		const Duration d = std::chrono::duration_cast<Duration>(end - begin);
+		total_time = total_time + d.count();
+		if (step) {
+			detection_counter++;
+		}
+		executeLastSteps(executor);
+
+		delete executor;
+		//system("pause");
+	}
+	closedir(dr);
+	std::cout << std::endl << "Total images: " << (vect.size() - 2) << std::endl;
+	std::cout << "Detected: " << detection_counter << std::endl;
+	std::cout << "Total time: " << total_time << std::endl;
+	std::cout << "Average Time: " << total_time / (vect.size() - 2) << std::endl;
 	system("pause");
 	return 1;
 }
@@ -60,28 +100,28 @@ int main(int argc, char * argv[]) {
 
 
 
-bool executeSteps(DLLExecution * executor) {
+bool executeFirstSteps(DLLExecution* executor) {
 
 	//Execute the four Pre-processing steps
 	if (!executor->executePreProcessingStep1(false)) {
-		std::cout << "Pre-processing step 1 failed!" << std::endl;
+		//std::cout << "Pre-processing step 1 failed!" << std::endl;
 		return false;
 	}
 
 	if (!executor->executePreProcessingStep2(false)) {
-		std::cout << "Pre-processing step 2 failed!" << std::endl;
+		//std::cout << "Pre-processing step 2 failed!" << std::endl;
 		return false;
 	}
 	ImageIO::saveIntensityImage(*executor->resultPreProcessingStep2, ImageIO::getDebugFileName("Pre-processing-2.png"));
 
 	if (!executor->executePreProcessingStep3(false)) {
-		std::cout << "Pre-processing step 3 failed!" << std::endl;
+		//std::cout << "Pre-processing step 3 failed!" << std::endl;
 		return false;
 	}
 	ImageIO::saveIntensityImage(*executor->resultPreProcessingStep3, ImageIO::getDebugFileName("Pre-processing-3.png"));
 
 	if (!executor->executePreProcessingStep4(false)) {
-		std::cout << "Pre-processing step 4 failed!" << std::endl;
+		//std::cout << "Pre-processing step 4 failed!" << std::endl;
 		return false;
 	}
 	ImageIO::saveIntensityImage(*executor->resultPreProcessingStep4, ImageIO::getDebugFileName("Pre-processing-4.png"));
@@ -90,69 +130,65 @@ bool executeSteps(DLLExecution * executor) {
 
 	//Execute the localization steps
 	if (!executor->prepareLocalization()) {
-		std::cout << "Localization preparation failed!" << std::endl;
+		//std::cout << "Localization preparation failed!" << std::endl;
 		return false;
 	}
 
 	if (!executor->executeLocalizationStep1(false)) {
-		std::cout << "Localization step 1 failed!" << std::endl;
+		//std::cout << "Localization step 1 failed!" << std::endl;
 		return false;
 	}
 
 	if (!executor->executeLocalizationStep2(false)) {
-		std::cout << "Localization step 2 failed!" << std::endl;
+		//std::cout << "Localization step 2 failed!" << std::endl;
 		return false;
 	}
 
 	if (!executor->executeLocalizationStep3(false)) {
-		std::cout << "Localization step 3 failed!" << std::endl;
+		//std::cout << "Localization step 3 failed!" << std::endl;
 		return false;
 	}
 
 	if (!executor->executeLocalizationStep4(false)) {
-		std::cout << "Localization step 4 failed!" << std::endl;
+		//std::cout << "Localization step 4 failed!" << std::endl;
 		return false;
 	}
-
-	if (!executor->executeLocalizationStep5(true)) {
-		std::cout << "Localization step 5 failed!" << std::endl;
-		return false;
-	}
+}
 
 
-
+bool executeLastSteps(DLLExecution* executor) {
 	//Execute the extraction steps
 	if (!executor->prepareExtraction()) {
-		std::cout << "Extraction preparation failed!" << std::endl;
+		//std::cout << "Extraction preparation failed!" << std::endl;
 		return false;
 	}
 
 	if (!executor->executeExtractionStep1(false)) {
-		std::cout << "Extraction step 1 failed!" << std::endl;
+		//std::cout << "Extraction step 1 failed!" << std::endl;
 		return false;
 	}
 
 	if (!executor->executeExtractionStep2(false)) {
-		std::cout << "Extraction step 2 failed!" << std::endl;
+		//std::cout << "Extraction step 2 failed!" << std::endl;
 		return false;
 	}
 
 	if (!executor->executeExtractionStep3(false)) {
-		std::cout << "Extraction step 3 failed!" << std::endl;
+		//std::cout << "Extraction step 3 failed!" << std::endl;
 		return false;
 	}
 
 
 	//Post processing and representation
 	if (!executor->executePostProcessing()) {
-		std::cout << "Post-processing failed!" << std::endl;
+		//std::cout << "Post-processing failed!" << std::endl;
 		return false;
 	}
 
 	drawFeatureDebugImage(*executor->resultPreProcessingStep1, executor->featuresScaled);
 
 	if (!executor->executeRepresentation()) {
-		std::cout << "Representation failed!" << std::endl;
+		//std::cout << "Representation failed!" << std::endl;
 		return false;
 	}
 	return true;

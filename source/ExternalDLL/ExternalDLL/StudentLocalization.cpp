@@ -30,60 +30,9 @@ bool StudentLocalization::stepFindNoseEndsAndEyes(const IntensityImage &image, F
 }
 
 bool StudentLocalization::stepFindExactEyes(const IntensityImage& image, FeatureMap& features) const {
-	
-	///#######################
-	///#	Delete me please #
-	///#	I am just a debug#
-	///#	line so delete	 #
-	///#######################
-	for (int i = 0; i <= 24; i++) {
-		std::cout<<"feature "<<i<<" "<< std::boolalpha <<" is "<<features.hasFeature(i) << "\n";
-		
-	}
-	
-
-
-	
-
-	Point2D<double> feat_left_head_nose = features.getFeature(Feature::FEATURE_HEAD_LEFT_NOSE_BOTTOM).getPoints()[0];
-	Point2D<double> feat_right_head_nose = features.getFeature(Feature::FEATURE_HEAD_RIGHT_NOSE_BOTTOM).getPoints()[0];
-	Point2D<double> head_left = features.getFeature(Feature::FEATURE_HEAD_LEFT_SIDE).getPoints()[0];
-	Point2D<double> head_right = features.getFeature(Feature::FEATURE_HEAD_RIGHT_SIDE).getPoints()[0];
-	Point2D<double> head_top = features.getFeature(Feature::FEATURE_HEAD_TOP).getPoints()[0];
-	double left_head_nose_bot_x = feat_left_head_nose.getX();
-	double left_head_nose_bot_y = feat_left_head_nose.getY();
-	double right_head_nose_bot_x = feat_right_head_nose.getX();
-	double right_head_nose_bot_y = feat_right_head_nose.getY();
-	double head_left_x = head_left.getX();
-	double head_left_y = head_left.getY();
-	double head_right_x = head_right.getX();
-	double head_right_y = head_right.getY();
-	double head_top_x = head_top.getX();
-	double head_top_y = head_top.getY();
-
-
-	std::cout << "xy coordinates of lef_head_nose_bot: " << "( " << left_head_nose_bot_x << " , " << left_head_nose_bot_y << ")" << std::endl;
-	std::cout << "xy coordinates of head left: " << "( " << head_left_x << " , " << head_left_y << ")" << std::endl;
-	std::cout << "xy coordinates of top head: " << "( " << head_top_x << " , " << head_top_y << ")" << std::endl;
-
-
-	for (size_t j = head_top_y; j <= left_head_nose_bot_y; j++) {
-
-		for (size_t i = head_left_x; i <= left_head_nose_bot_x; i++) {
-			int pix = image.getPixel(j, i);
-			std::cout << pix;
-		}
-		
-		std::cout << std::endl;
-	}
-
-	std::cout << std::endl << std::endl;
-	std::cout << "test" << std::endl;
 	//std::cout << "=========Localization step 5=========" << std::endl;
 	//std::cout << "Searching for: Eye's" << std::endl;
 	//std::cout << "================Debug================" << std::endl;
-
-	auto time_1 = std::chrono::high_resolution_clock::now();
 	
 	
 	//Known head parameters.
@@ -275,8 +224,6 @@ bool StudentLocalization::stepFindExactEyes(const IntensityImage& image, Feature
 	//Save debug image
 	ImageIO::saveRGBImage(*debugImage, ImageIO::getDebugFileName("Localization-5/debug.png"));
 	delete debugImage;
-	auto time_2 = std::chrono::high_resolution_clock::now();
-	auto function_duration = std::chrono::duration_cast<std::chrono::milliseconds>(time_2 - time_1).count();
-	std::cout << "Function duration time: " << function_duration << " ms\n";
+	
 	return true;
 }

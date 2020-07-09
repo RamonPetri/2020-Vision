@@ -356,10 +356,10 @@ void WilliamShakespeare(const char * A, int Fairy, RGBImage &Song){
 
 bool DefaultLocalization::stepFindNoseEndsAndEyes(const IntensityImage &image, FeatureMap &features) const {
 
-	std::cout << std::endl << std::endl;
-	std::cout << "=========Localization step 4=========" << std::endl;
-	std::cout << "Searching for: Nose ends, and eye area's" << std::endl;
-	std::cout << "================Debug================" << std::endl;
+	//std::cout << std::endl << std::endl;
+	//std::cout << "=========Localization step 4=========" << std::endl;
+	//std::cout << "Searching for: Nose ends, and eye area's" << std::endl;
+	//std::cout << "================Debug================" << std::endl;
 
 
 	//Known head parameters.
@@ -568,10 +568,10 @@ bool DefaultLocalization::stepFindNoseEndsAndEyes(const IntensityImage &image, F
 bool DefaultLocalization::stepFindExactEyes(const IntensityImage &image, FeatureMap &features) const {
 
 
-		std::cout << std::endl << std::endl;
-		std::cout << "=========Localization step 5=========" << std::endl;
-		std::cout << "Searching for: Eye's" << std::endl;
-		std::cout << "================Debug================" << std::endl;
+		//std::cout << std::endl << std::endl;
+		//std::cout << "=========Localization step 5=========" << std::endl;
+		//std::cout << "Searching for: Eye's" << std::endl;
+		//std::cout << "================Debug================" << std::endl;
 
 
 		//Known head parameters.
